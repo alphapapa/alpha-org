@@ -1,0 +1,180 @@
+#+TITLE: alpha-org
+
+=alpha-org= is a powerful configuration for =org-mode=, similar to how [[http://spacemacs.org/][Spacemacs]] and [[https://github.com/hlissner/doom-emacs][Doom]] are configurations for Emacs as a whole.
+
+* Installation
+
+The easiest way to install the whole thing is with [[https://framagit.org/steckerhalter/quelpa][Quelpa]], which may be installed from [[https://melpa.org][MELPA]].  Evaluate this code:
+
+#+begin_src elisp :tangle no
+  (quelpa '(alpha-org :fetcher github :repo "alphapapa/alpha-org"))
+#+end_src
+
+* Requirements
+
+These packages must already be installed:
+
++  [[https://github.com/jwiegley/use-package][use-package]]
+
+* Code
+:PROPERTIES:
+:header-args:elisp: :tangle alpha-org.el
+:END:
+
+** Header
+
+This header is tangled to =alpha-org.el=, declaring package dependencies so that they can be installed automatically.
+
+#+BEGIN_SRC elisp
+;;; alpha-org.el --- A powerful Org configuration           -*- lexical-binding: t; -*-
+
+;; Author: Adam Porter <adam@alphapapa.net>
+;; Keywords: outlines
+
+;; Package-Requires: ((emacs "26.3") (use-package) (org-bullets) (org-make-toc) (org-sticky-header))
+
+;;; License:
+
+;; Copyright (C) 2019  Adam Porter
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; `alpha-org' is a powerful configuration for `org-mode', similar to
+;; how Spacemacs and Doom are configurations for Emacs as a whole.
+
+;;; Code:
+
+;;;; Requirements
+
+(require 'use-package)
+#+END_SRC
+
+
+** Configuration
+
+ This section includes configuration code for options and packages built-in to Org.
+
+#+begin_src elisp
+;;;; Configuration
+#+end_src
+
+*** =org-indent-mode=
+
+ This mode displays text indented to match its heading's indentation.  Text is not actually indented in the buffer.
+
+ #+BEGIN_SRC elisp
+   (add-hook 'org-mode-hook 'org-indent-mode)
+ #+END_SRC
+
+*** TODO Comparison screenshot
+
+** Packages
+
+ These packages are included and configured by default.  Each package links to its configuration code later in this file.
+
+#+begin_src elisp
+;;;; Packages
+#+end_src
+
+*** Contents
+    :PROPERTIES:
+    :TOC:      siblings
+    :END:
+      -  [[#agenda-01][Agenda {0/1}]]
+        -  [[#org-super-agenda][=org-super-agenda=]]
+      -  [[#appearance--ui-02][Appearance / UI {0/2}]]
+        -  [[#org-sidebar][=org-sidebar=]]
+        -  [[#yequake][=yequake=]]
+        -  [[#httpsgithubcomemacsorphanageorg-bulletsorg-bullets][=org-bullets=]]
+          -  [[#screenshot][Screenshot]]
+        -  [[#httpsgithubcomalphapapaorg-sticky-headerorg-sticky-header][=org-sticky-header=]]
+          -  [[#screenshot][Screenshot]]
+      -  [[#miscellaneous][Miscellaneous]]
+        -  [[#httpsgithubcomalphapapaorg-make-tocorg-make-toc][=org-make-toc=]]
+      -  [[#searching-05][Searching {0/5}]]
+        -  [[#helm-org][=helm-org=]]
+        -  [[#org-ql][=org-ql=]]
+        -  [[#org-recent-headings][=org-recent-headings=]]
+        -  [[#org-web-tools][=org-web-tools=]]
+        -  [[#org-bookmark-heading][=org-bookmark-heading=]]
+
+*** TODO Agenda [0/1]
+
+**** TODO =org-super-agenda=
+
+*** TODO Appearance / UI [0/2]
+
+
+**** TODO =org-sidebar=
+**** TODO =yequake=
+
+ The ~yequake-org-capture~ function is used to provide a quick capturing UI with drop-down Emacs windows that disappear automatically when a capture is finalized or canceled.
+
+**** [[https://github.com/emacsorphanage/org-bullets][=org-bullets=]]
+
+  This mode replaces heading stars with visually appealing ones.  Its settings can be customized in the =org-bullets= group.
+
+  #+BEGIN_SRC elisp
+    (use-package org-bullets
+      :hook (org-mode . org-bullets-mode))
+  #+END_SRC
+
+***** TODO Screenshot
+**** [[https://github.com/alphapapa/org-sticky-header][=org-sticky-header=]]
+
+This package displays in the header-line the Org heading for the node that’s at the top of the window. This way, if the heading for the text at the top of the window is beyond the top of the window, you don’t forget which heading the text belongs to. The display can be customized to show just the heading, the full outline path, or the full outline path in reverse.
+
+#+BEGIN_SRC elisp
+  (use-package org-sticky-header
+    :hook (org-mode . org-sticky-header-mode))
+#+END_SRC
+***** TODO Screenshot
+*** Miscellaneous
+
+**** [[https://github.com/alphapapa/org-make-toc][=org-make-toc=]]
+
+This package automates customizeable tables of contents in Org files.
+
+#+BEGIN_SRC elisp
+  (use-package org-make-toc
+    :hook (org-mode . org-make-toc-mode))
+#+END_SRC
+
+*** TODO Searching [0/5]
+
+**** TODO =helm-org=
+**** TODO =org-ql=
+**** TODO =org-recent-headings=
+**** TODO =org-web-tools=
+**** TODO =org-bookmark-heading=
+** Footer
+
+#+begin_src elisp
+;;;; Footer
+
+(provide 'alpha-org)
+
+;;; alpha-org.el ends here
+
+#+end_src
+
+* Config
+
+File-local configuration.
+
+# Local Variables:
+# after-save-hook: org-babel-tangle
+# End:
