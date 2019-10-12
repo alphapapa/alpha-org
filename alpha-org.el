@@ -57,7 +57,8 @@
   :general
   (alpha-org/general-def
    "vs" #'org-sidebar-toggle
-   "vt" #'org-sidebar-tree-toggle))
+   "vt" #'org-sidebar-tree-toggle)
+  :custom (org-sidebar-tree-side 'left))
 
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))

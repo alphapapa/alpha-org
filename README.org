@@ -22,6 +22,10 @@ To best demonstrate the power of this configuration, it's necessary to bind some
   + =vs= :: Show default sidebars (=org-sidebar-toggle=).
   + =vt= :: Show tree sidebar (=org-sidebar-tree-toggle=).
 
+* TODO Tutorial
+
+A step-by-step guide showing the use of some features would probably be helpful.
+
 * Requirements
 
 These packages must already be installed:
@@ -111,6 +115,7 @@ Speed commands provide one-key bindings to quickly navigate and manipulate outli
                                    (looking-back "^\**")))))
 #+end_src
 
+**** TODO Link to Org documentation for speed command keys
 *** org-indent-mode
 
  This mode displays text indented to match its heading's indentation.  Text is not actually indented in the buffer.
@@ -133,6 +138,15 @@ Speed commands provide one-key bindings to quickly navigate and manipulate outli
     :PROPERTIES:
     :TOC:      siblings
     :END:
+    -  [[#header][Header]]
+    -  [[#httpsgithubcomnoctuidgeneralelgeneral][General]]
+      -  [[#prefix-key-variable][Prefix key variable?]]
+    -  [[#org-configuration][Org Configuration]]
+      -  [[#speed-commands][Speed commands]]
+        -  [[#link-to-org-documentation-for-speed-command-keys][Link to Org documentation for speed command keys]]
+      -  [[#org-indent-mode][org-indent-mode]]
+        -  [[#comparison-screenshot][Comparison screenshot]]
+    -  [[#org-packages][Org Packages]]
       -  [[#agenda-01][Agenda {0/1}]]
         -  [[#org-super-agenda][org-super-agenda]]
       -  [[#appearance--ui-02][Appearance / UI {0/2}]]
@@ -152,6 +166,7 @@ Speed commands provide one-key bindings to quickly navigate and manipulate outli
         -  [[#org-recent-headings][org-recent-headings]]
         -  [[#org-web-tools][org-web-tools]]
         -  [[#org-bookmark-heading][org-bookmark-heading]]
+    -  [[#footer][Footer]]
 
 *** TODO Agenda [0/1]
 
@@ -167,7 +182,8 @@ Speed commands provide one-key bindings to quickly navigate and manipulate outli
     :general
     (alpha-org/general-def
      "vs" #'org-sidebar-toggle
-     "vt" #'org-sidebar-tree-toggle))
+     "vt" #'org-sidebar-tree-toggle)
+    :custom (org-sidebar-tree-side 'left))
 #+end_src
 
 ***** TODO Screenshots
@@ -197,7 +213,7 @@ This package displays in the header-line the Org heading for the node that’s a
 ***** TODO Screenshot
 *** Miscellaneous
 
-**** [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
+**** DONE [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
 
 This package automates customizeable tables of contents in Org files.
 
