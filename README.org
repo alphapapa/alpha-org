@@ -25,6 +25,8 @@ To best demonstrate the power of this configuration, it's necessary to bind some
 
 * UNDERWAY Tutorial / Demo
 
+# These should probably be organized into sections by related features, e.g. search, sidebars, etc.
+
 A step-by-step guide showing the use of some features would probably be helpful.  Here's a start:
 
 1. Install the =alpha-org= package.
@@ -123,6 +125,8 @@ Can I use a variable for this prefix key?
 *** TODO Avy
 **** TODO Refile as child
 
+# TODO: Refile this to Other Code section.
+
 #+BEGIN_SRC elisp
   (defun ap/org-avy-refile-as-child ()
     "Refile current heading as first child of heading selected with `avy.'"
@@ -175,7 +179,7 @@ Code and packages that are directly Org-related.
 Speed commands provide one-key bindings to quickly navigate and manipulate outlines.
 
 #+begin_src elisp
-  (use-package org-mode
+  (use-package org
     :custom
     (org-use-speed-commands (lambda ()
                               (and (looking-at org-outline-regexp)
@@ -225,11 +229,11 @@ Speed commands provide one-key bindings to quickly navigate and manipulate outli
 
 ***** TODO yequake
 
- The ~yequake-org-capture~ function is used to provide a quick capturing UI with drop-down Emacs windows that disappear automatically when a capture is finalized or canceled.
+The ~yequake-org-capture~ function is used to provide a quick capturing UI with drop-down Emacs windows that disappear automatically when a capture is finalized or canceled.
 
 ***** [[https://github.com/emacsorphanage/org-bullets][org-bullets]]
 
-  This mode replaces heading stars with visually appealing ones.  Its settings can be customized in the =org-bullets= group.
+This mode replaces heading stars with visually appealing ones.  Its settings can be customized in the =org-bullets= group.
 
   #+BEGIN_SRC elisp
     (use-package org-bullets
@@ -237,6 +241,7 @@ Speed commands provide one-key bindings to quickly navigate and manipulate outli
   #+END_SRC
 
 ****** TODO Screenshot
+
 ***** [[https://github.com/alphapapa/org-sticky-header][org-sticky-header]]
 
 This package displays in the header-line the Org heading for the node that’s at the top of the window. This way, if the heading for the text at the top of the window is beyond the top of the window, you don’t forget which heading the text belongs to. The display can be customized to show just the heading, the full outline path, or the full outline path in reverse.

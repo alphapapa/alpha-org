@@ -72,7 +72,7 @@
 
 ;;  This section includes configuration code for options and packages built-in to Org.
 
-(use-package org-mode
+(use-package org
   :custom
   (org-use-speed-commands (lambda ()
                             (and (looking-at org-outline-regexp)
