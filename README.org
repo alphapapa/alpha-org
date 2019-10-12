@@ -236,4 +236,5 @@ File-local configuration.
 
 # Local Variables:
 # after-save-hook: org-babel-tangle
+# eval: (visual-line-mode)
 # End:
