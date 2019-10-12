@@ -8,10 +8,11 @@ This can be used as a package which you [[*Installation][install]], or, since ea
 
 ** Installation
 
-The easiest way to install the whole thing is with [[https://framagit.org/steckerhalter/quelpa][Quelpa]] (which may be installed from [[https://melpa.org][MELPA]]), like so:
+The easiest way to install the whole thing is with [[https://framagit.org/steckerhalter/quelpa-use-package][quelpa-use-package]] (which may be installed from [[https://melpa.org][MELPA]]), like so:
 
 #+begin_src elisp :tangle no
-  (quelpa '(alpha-org :fetcher github :repo "alphapapa/alpha-org"))
+  (use-package alpha-org
+    :quelpa (alpha-org :fetcher github :repo "alphapapa/alpha-org"))
 #+end_src
 
 ** Key Bindings
@@ -19,12 +20,33 @@ The easiest way to install the whole thing is with [[https://framagit.org/stecke
 To best demonstrate the power of this configuration, it's necessary to bind some keys by default (because using =M-x= to access everything is relatively cumbersome).  While this config isn't designed to work with [[https://github.com/emacs-evil/evil][EVIL]], similar to Spacemacs, Doom, and Vim, all keys bound by this config are under a [[*%5B%5Bhttps://github.com/noctuid/general.el%5D%5BGeneral%5D%5D][prefix key]], which is =M-SPC= by default.
 
 + Sidebars
-  + =vs= :: Show default sidebars (=org-sidebar-toggle=).
-  + =vt= :: Show tree sidebar (=org-sidebar-tree-toggle=).
+  + =M-SPC vs= :: Show default sidebars (=org-sidebar-toggle=).
+  + =M-SPC vt= :: Show tree sidebar (=org-sidebar-tree-toggle=).
 
-* TODO Tutorial
+* UNDERWAY Tutorial / Demo
 
-A step-by-step guide showing the use of some features would probably be helpful.
+A step-by-step guide showing the use of some features would probably be helpful.  Here's a start:
+
+1. Install the =alpha-org= package.
+2. Open this =README.org= file.
+3. Press =M-SPC vt= to show the tree sidebar, and again to hide it.
+4. Press =M-SPC vs= to show the item sidebar, and again to hide it.
+5. Select the tree sidebar window and press =<S-tab>= to globally cycle the tree's outline visibility.
+6. Click on a heading *(which one?)* in the tree sidebar to show that entry's contents.
+7. Press =M-SPC vt= to show the tree sidebar for just that entry.
+8. In the tree sidebar, click and drag the on a heading to show more of its contents.  Try clicking and dragging with both =mouse-1= and =mouse-2=.
+
+
+** TODO Demo =org-return-dwim=
+
+** TODO Demo =org-sticky-header=
+
+Show how scrolling down past the heading still shows it in the header line.
+
+** MAYBE Scripted GIF screencast
+
+Like [[https://github.com/alphapapa/org-ql/blob/master/images/demo-helm-org-ql.sh][this script]].
+
 
 * Requirements
 
@@ -79,7 +101,11 @@ This header is tangled to =alpha-org.el=, declaring package dependencies so that
 #+END_SRC
 
 
-** [[https://github.com/noctuid/general.el][General]]
+** Non-Org
+
+Code and packages that aren't directly Org-related.
+
+*** [[https://github.com/noctuid/general.el][General]]
 
 General is used to ease configuration of key bindings.
 
@@ -91,11 +117,48 @@ General is used to ease configuration of key bindings.
       :prefix "M-SPC"))
 #+end_src
 
-*** TODO Prefix key variable?
+**** TODO Prefix key variable?
 
 Can I use a variable for this prefix key?
+*** TODO Avy
+**** TODO Refile as child
 
-** Org Configuration
+#+BEGIN_SRC elisp
+  (defun ap/org-avy-refile-as-child ()
+    "Refile current heading as first child of heading selected with `avy.'"
+    ;; Inspired by `org-teleport': http://kitchingroup.cheme.cmu.edu/blog/2016/03/18/Org-teleport-headlines/
+    (interactive)
+    ;; NOTE: Use `when-let' so that if avy is aborted with "C-g", `org-refile' won't be called with
+    ;; a nil refile location.
+    (when-let ((marker (ap/org-avy-marker)))
+      (let* ((filename (buffer-file-name (or (buffer-base-buffer (marker-buffer marker))
+                                             (marker-buffer marker))))
+             (heading (org-with-point-at marker
+                        (org-get-heading 'no-tags 'no-todo)))
+             ;; NOTE: I guess this won't work with target buffers whose filename is nil, but I doubt
+             ;; I'll ever want to do that.
+             (rfloc (list heading filename nil marker))
+             (org-after-refile-insert-hook (cons #'org-reveal org-after-refile-insert-hook)))
+        (org-refile nil nil rfloc))))
+
+  (defun ap/org-avy-marker ()
+    "Return marker at Org heading selected with avy."
+    (save-excursion
+      (when-let* ((org-reverse-note-order t)
+                  (pos (atypecase (avy-with avy-goto-line
+                                    (avy--generic-jump (rx bol "*") nil avy-style))
+                         ;; If avy is aborted with "C-g", it returns `t', so we know it was NOT
+                         ;; aborted when it returns an int.  If it doesn't return an int, we return
+                         ;; nil.
+                         (integer it))))
+        (copy-marker pos))))
+#+END_SRC
+
+** Org 
+
+Code and packages that are directly Org-related.
+
+*** Configuration
 
 #+begin_src elisp
 ;;;; Configuration
@@ -103,7 +166,7 @@ Can I use a variable for this prefix key?
 ;;  This section includes configuration code for options and packages built-in to Org.
 #+end_src
 
-*** Speed commands
+**** Speed commands
 
 Speed commands provide one-key bindings to quickly navigate and manipulate outlines.
 
@@ -115,8 +178,8 @@ Speed commands provide one-key bindings to quickly navigate and manipulate outli
                                    (looking-back "^\**")))))
 #+end_src
 
-**** TODO Link to Org documentation for speed command keys
-*** org-indent-mode
+***** TODO Link to Org documentation for speed command keys
+**** org-indent-mode
 
  This mode displays text indented to match its heading's indentation.  Text is not actually indented in the buffer.
 
@@ -124,9 +187,8 @@ Speed commands provide one-key bindings to quickly navigate and manipulate outli
    (add-hook 'org-mode-hook 'org-indent-mode)
  #+END_SRC
 
-**** TODO Comparison screenshot
-
-** Org Packages
+***** TODO Comparison screenshot
+*** Packages
 
  These packages are included and configured by default.  Each package links to its configuration code later in this file.
 
@@ -134,48 +196,17 @@ Speed commands provide one-key bindings to quickly navigate and manipulate outli
 ;;;; Packages
 #+end_src
 
-*** Contents
-    :PROPERTIES:
-    :TOC:      siblings
-    :END:
-    -  [[#header][Header]]
-    -  [[#httpsgithubcomnoctuidgeneralelgeneral][General]]
-      -  [[#prefix-key-variable][Prefix key variable?]]
-    -  [[#org-configuration][Org Configuration]]
-      -  [[#speed-commands][Speed commands]]
-        -  [[#link-to-org-documentation-for-speed-command-keys][Link to Org documentation for speed command keys]]
-      -  [[#org-indent-mode][org-indent-mode]]
-        -  [[#comparison-screenshot][Comparison screenshot]]
-    -  [[#org-packages][Org Packages]]
-      -  [[#agenda-01][Agenda {0/1}]]
-        -  [[#org-super-agenda][org-super-agenda]]
-      -  [[#appearance--ui-02][Appearance / UI {0/2}]]
-        -  [[#org-sidebar][org-sidebar]]
-          -  [[#screenshots][Screenshots]]
-        -  [[#yequake][yequake]]
-        -  [[#httpsgithubcomemacsorphanageorg-bulletsorg-bullets][org-bullets]]
-          -  [[#screenshot][Screenshot]]
-        -  [[#httpsgithubcomalphapapaorg-sticky-headerorg-sticky-header][org-sticky-header]]
-          -  [[#screenshot][Screenshot]]
-      -  [[#miscellaneous][Miscellaneous]]
-        -  [[#httpsgithubcomalphapapaorg-make-tocorg-make-toc][org-make-toc]]
-        -  [[#httpsgithubcomalphapapaunpackagedelunpackaged][unpackaged]]
-      -  [[#searching-05][Searching {0/5}]]
-        -  [[#helm-org][helm-org]]
-        -  [[#org-ql][org-ql]]
-        -  [[#org-recent-headings][org-recent-headings]]
-        -  [[#org-web-tools][org-web-tools]]
-        -  [[#org-bookmark-heading][org-bookmark-heading]]
-    -  [[#footer][Footer]]
+**** Contents
 
-*** TODO Agenda [0/1]
+# Temporarily disabling the ToC here because sometimes it's annoying having it regenerated while I'm working on the file.
+**** TODO Agenda [0/1]
 
-**** TODO org-super-agenda
+***** TODO org-super-agenda
 
-*** TODO Appearance / UI [0/2]
+**** TODO Appearance / UI [0/2]
 
 
-**** TODO org-sidebar
+***** TODO org-sidebar
 
 #+begin_src elisp
   (use-package org-sidebar
@@ -186,13 +217,13 @@ Speed commands provide one-key bindings to quickly navigate and manipulate outli
     :custom (org-sidebar-tree-side 'left))
 #+end_src
 
-***** TODO Screenshots
+****** TODO Screenshots
 
-**** TODO yequake
+***** TODO yequake
 
  The ~yequake-org-capture~ function is used to provide a quick capturing UI with drop-down Emacs windows that disappear automatically when a capture is finalized or canceled.
 
-**** [[https://github.com/emacsorphanage/org-bullets][org-bullets]]
+***** [[https://github.com/emacsorphanage/org-bullets][org-bullets]]
 
   This mode replaces heading stars with visually appealing ones.  Its settings can be customized in the =org-bullets= group.
 
@@ -201,8 +232,8 @@ Speed commands provide one-key bindings to quickly navigate and manipulate outli
       :hook (org-mode . org-bullets-mode))
   #+END_SRC
 
-***** TODO Screenshot
-**** [[https://github.com/alphapapa/org-sticky-header][org-sticky-header]]
+****** TODO Screenshot
+***** [[https://github.com/alphapapa/org-sticky-header][org-sticky-header]]
 
 This package displays in the header-line the Org heading for the node that’s at the top of the window. This way, if the heading for the text at the top of the window is beyond the top of the window, you don’t forget which heading the text belongs to. The display can be customized to show just the heading, the full outline path, or the full outline path in reverse.
 
@@ -210,10 +241,10 @@ This package displays in the header-line the Org heading for the node that’s a
   (use-package org-sticky-header
     :hook (org-mode . org-sticky-header-mode))
 #+END_SRC
-***** TODO Screenshot
-*** Miscellaneous
+****** TODO Screenshot
+**** Miscellaneous
 
-**** DONE [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
+***** DONE [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
 
 This package automates customizeable tables of contents in Org files.
 
@@ -222,17 +253,44 @@ This package automates customizeable tables of contents in Org files.
     :hook (org-mode . org-make-toc-mode))
 #+END_SRC
 
-**** MAYBE [[https://github.com/alphapapa/unpackaged.el][unpackaged]]
+***** MAYBE [[https://github.com/alphapapa/unpackaged.el][unpackaged]]
 
 Not sure if I should use it or move its Org-related code into this.
 
-*** TODO Searching [0/5]
+**** TODO Searching [0/5]
 
-**** TODO helm-org
-**** TODO org-ql
-**** TODO org-recent-headings
-**** TODO org-web-tools
-**** TODO org-bookmark-heading
+***** TODO helm-org
+***** TODO org-ql
+***** TODO org-recent-headings
+***** TODO org-web-tools
+***** TODO org-bookmark-heading
+
+*** Other Code
+
+**** TODO Outline tidying
+
+My function that fixes blank lines between entries.
+
+**** TODO =org-return-dwim=
+
+Should demo this too.
+
+**** TODO Refile within buffer
+
+#+BEGIN_SRC elisp
+  (defun ap/org-refile-within-buffer ()
+    "Call `org-refile' with `org-refile-targets' set to current buffer's headings."
+    ;; This works now, but it doesn't fontify the headings/paths like
+    ;; Helm does, so it's faster but doesn't look as nice
+    (interactive)
+    (let ((org-refile-use-cache nil)
+          (org-refile-use-outline-path t)
+          (org-refile-targets (list (cons (list (buffer-file-name (or (buffer-base-buffer (current-buffer))
+                                                                      (current-buffer))))
+                                          (cons :maxlevel 20)))))
+      (call-interactively 'org-refile)))
+#+END_SRC
+
 ** Footer
 
 #+begin_src elisp
@@ -248,7 +306,7 @@ Not sure if I should use it or move its Org-related code into this.
 
 File-local configuration.
 
-#+TODO: TODO MAYBE | DONE CANCELLED
+#+TODO: TODO UNDERWAY MAYBE | DONE CANCELLED
 
 # Local Variables:
 # after-save-hook: org-babel-tangle
