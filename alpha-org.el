@@ -3,7 +3,7 @@
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; Keywords: outlines
 
-;; Package-Requires: ((emacs "26.3") (use-package) (org-bullets) (org-make-toc) (org-sticky-header))
+;; Package-Requires: ((emacs "26.3") (use-package) (general) (org-bullets) (org-make-toc) (org-sidebar) (org-sticky-header))
 
 ;;; License:
 
@@ -33,11 +33,31 @@
 
 (require 'use-package)
 
+(use-package general
+  :config
+  (global-unset-key (kbd "M-SPC"))
+  (general-create-definer alpha-org/general-def
+    :prefix "M-SPC"))
+
 ;;;; Configuration
+
+;;  This section includes configuration code for options and packages built-in to Org.
+
+(use-package org-mode
+  :custom
+  (org-use-speed-commands (lambda ()
+                            (and (looking-at org-outline-regexp)
+                                 (looking-back "^\**")))))
 
 (add-hook 'org-mode-hook 'org-indent-mode)
 
 ;;;; Packages
+
+(use-package org-sidebar
+  :general
+  (alpha-org/general-def
+   "vs" #'org-sidebar-toggle
+   "vt" #'org-sidebar-tree-toggle))
 
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))

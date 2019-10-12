@@ -2,13 +2,25 @@
 
 =alpha-org= is a powerful configuration for =org-mode=, similar to how [[http://spacemacs.org/][Spacemacs]] and [[https://github.com/hlissner/doom-emacs][Doom]] are configurations for Emacs as a whole.
 
-* Installation
+* Usage
 
-The easiest way to install the whole thing is with [[https://framagit.org/steckerhalter/quelpa][Quelpa]], which may be installed from [[https://melpa.org][MELPA]].  Evaluate this code:
+This can be used as a package which you [[*Installation][install]], or, since each feature is configured in its own =use-package= block, you may copy parts into your own config.
+
+** Installation
+
+The easiest way to install the whole thing is with [[https://framagit.org/steckerhalter/quelpa][Quelpa]] (which may be installed from [[https://melpa.org][MELPA]]), like so:
 
 #+begin_src elisp :tangle no
   (quelpa '(alpha-org :fetcher github :repo "alphapapa/alpha-org"))
 #+end_src
+
+** Key Bindings
+
+To best demonstrate the power of this configuration, it's necessary to bind some keys by default (because using =M-x= to access everything is relatively cumbersome).  While this config isn't designed to work with [[https://github.com/emacs-evil/evil][EVIL]], similar to Spacemacs, Doom, and Vim, all keys bound by this config are under a [[*%5B%5Bhttps://github.com/noctuid/general.el%5D%5BGeneral%5D%5D][prefix key]], which is =M-SPC= by default.
+
++ Sidebars
+  + =vs= :: Show default sidebars (=org-sidebar-toggle=).
+  + =vt= :: Show tree sidebar (=org-sidebar-tree-toggle=).
 
 * Requirements
 
@@ -31,7 +43,7 @@ This header is tangled to =alpha-org.el=, declaring package dependencies so that
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; Keywords: outlines
 
-;; Package-Requires: ((emacs "26.3") (use-package) (org-bullets) (org-make-toc) (org-sticky-header))
+;; Package-Requires: ((emacs "26.3") (use-package) (general) (org-bullets) (org-make-toc) (org-sidebar) (org-sticky-header))
 
 ;;; License:
 
@@ -63,15 +75,43 @@ This header is tangled to =alpha-org.el=, declaring package dependencies so that
 #+END_SRC
 
 
-** Configuration
+** [[https://github.com/noctuid/general.el][General]]
 
- This section includes configuration code for options and packages built-in to Org.
+General is used to ease configuration of key bindings.
+
+#+begin_src elisp
+  (use-package general
+    :config
+    (global-unset-key (kbd "M-SPC"))
+    (general-create-definer alpha-org/general-def
+      :prefix "M-SPC"))
+#+end_src
+
+*** TODO Prefix key variable?
+
+Can I use a variable for this prefix key?
+
+** Org Configuration
 
 #+begin_src elisp
 ;;;; Configuration
+
+;;  This section includes configuration code for options and packages built-in to Org.
 #+end_src
 
-*** =org-indent-mode=
+*** Speed commands
+
+Speed commands provide one-key bindings to quickly navigate and manipulate outlines.
+
+#+begin_src elisp
+  (use-package org-mode
+    :custom
+    (org-use-speed-commands (lambda ()
+                              (and (looking-at org-outline-regexp)
+                                   (looking-back "^\**")))))
+#+end_src
+
+*** org-indent-mode
 
  This mode displays text indented to match its heading's indentation.  Text is not actually indented in the buffer.
 
@@ -79,9 +119,9 @@ This header is tangled to =alpha-org.el=, declaring package dependencies so that
    (add-hook 'org-mode-hook 'org-indent-mode)
  #+END_SRC
 
-*** TODO Comparison screenshot
+**** TODO Comparison screenshot
 
-** Packages
+** Org Packages
 
  These packages are included and configured by default.  Each package links to its configuration code later in this file.
 
@@ -94,36 +134,49 @@ This header is tangled to =alpha-org.el=, declaring package dependencies so that
     :TOC:      siblings
     :END:
       -  [[#agenda-01][Agenda {0/1}]]
-        -  [[#org-super-agenda][=org-super-agenda=]]
+        -  [[#org-super-agenda][org-super-agenda]]
       -  [[#appearance--ui-02][Appearance / UI {0/2}]]
-        -  [[#org-sidebar][=org-sidebar=]]
-        -  [[#yequake][=yequake=]]
-        -  [[#httpsgithubcomemacsorphanageorg-bulletsorg-bullets][=org-bullets=]]
+        -  [[#org-sidebar][org-sidebar]]
+          -  [[#screenshots][Screenshots]]
+        -  [[#yequake][yequake]]
+        -  [[#httpsgithubcomemacsorphanageorg-bulletsorg-bullets][org-bullets]]
           -  [[#screenshot][Screenshot]]
-        -  [[#httpsgithubcomalphapapaorg-sticky-headerorg-sticky-header][=org-sticky-header=]]
+        -  [[#httpsgithubcomalphapapaorg-sticky-headerorg-sticky-header][org-sticky-header]]
           -  [[#screenshot][Screenshot]]
       -  [[#miscellaneous][Miscellaneous]]
-        -  [[#httpsgithubcomalphapapaorg-make-tocorg-make-toc][=org-make-toc=]]
+        -  [[#httpsgithubcomalphapapaorg-make-tocorg-make-toc][org-make-toc]]
+        -  [[#httpsgithubcomalphapapaunpackagedelunpackaged][unpackaged]]
       -  [[#searching-05][Searching {0/5}]]
-        -  [[#helm-org][=helm-org=]]
-        -  [[#org-ql][=org-ql=]]
-        -  [[#org-recent-headings][=org-recent-headings=]]
-        -  [[#org-web-tools][=org-web-tools=]]
-        -  [[#org-bookmark-heading][=org-bookmark-heading=]]
+        -  [[#helm-org][helm-org]]
+        -  [[#org-ql][org-ql]]
+        -  [[#org-recent-headings][org-recent-headings]]
+        -  [[#org-web-tools][org-web-tools]]
+        -  [[#org-bookmark-heading][org-bookmark-heading]]
 
 *** TODO Agenda [0/1]
 
-**** TODO =org-super-agenda=
+**** TODO org-super-agenda
 
 *** TODO Appearance / UI [0/2]
 
 
-**** TODO =org-sidebar=
-**** TODO =yequake=
+**** TODO org-sidebar
+
+#+begin_src elisp
+  (use-package org-sidebar
+    :general
+    (alpha-org/general-def
+     "vs" #'org-sidebar-toggle
+     "vt" #'org-sidebar-tree-toggle))
+#+end_src
+
+***** TODO Screenshots
+
+**** TODO yequake
 
  The ~yequake-org-capture~ function is used to provide a quick capturing UI with drop-down Emacs windows that disappear automatically when a capture is finalized or canceled.
 
-**** [[https://github.com/emacsorphanage/org-bullets][=org-bullets=]]
+**** [[https://github.com/emacsorphanage/org-bullets][org-bullets]]
 
   This mode replaces heading stars with visually appealing ones.  Its settings can be customized in the =org-bullets= group.
 
@@ -133,7 +186,7 @@ This header is tangled to =alpha-org.el=, declaring package dependencies so that
   #+END_SRC
 
 ***** TODO Screenshot
-**** [[https://github.com/alphapapa/org-sticky-header][=org-sticky-header=]]
+**** [[https://github.com/alphapapa/org-sticky-header][org-sticky-header]]
 
 This package displays in the header-line the Org heading for the node that’s at the top of the window. This way, if the heading for the text at the top of the window is beyond the top of the window, you don’t forget which heading the text belongs to. The display can be customized to show just the heading, the full outline path, or the full outline path in reverse.
 
@@ -144,7 +197,7 @@ This package displays in the header-line the Org heading for the node that’s a
 ***** TODO Screenshot
 *** Miscellaneous
 
-**** [[https://github.com/alphapapa/org-make-toc][=org-make-toc=]]
+**** [[https://github.com/alphapapa/org-make-toc][org-make-toc]]
 
 This package automates customizeable tables of contents in Org files.
 
@@ -153,13 +206,17 @@ This package automates customizeable tables of contents in Org files.
     :hook (org-mode . org-make-toc-mode))
 #+END_SRC
 
+**** MAYBE [[https://github.com/alphapapa/unpackaged.el][unpackaged]]
+
+Not sure if I should use it or move its Org-related code into this.
+
 *** TODO Searching [0/5]
 
-**** TODO =helm-org=
-**** TODO =org-ql=
-**** TODO =org-recent-headings=
-**** TODO =org-web-tools=
-**** TODO =org-bookmark-heading=
+**** TODO helm-org
+**** TODO org-ql
+**** TODO org-recent-headings
+**** TODO org-web-tools
+**** TODO org-bookmark-heading
 ** Footer
 
 #+begin_src elisp
@@ -171,9 +228,11 @@ This package automates customizeable tables of contents in Org files.
 
 #+end_src
 
-* Config
+* File Configuration
 
 File-local configuration.
+
+#+TODO: TODO MAYBE | DONE CANCELLED
 
 # Local Variables:
 # after-save-hook: org-babel-tangle
