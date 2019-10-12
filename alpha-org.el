@@ -3,7 +3,7 @@
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; Keywords: outlines
 
-;; Package-Requires: ((emacs "26.3") (use-package) (general) (org-bullets) (org-make-toc) (org-sidebar) (org-sticky-header))
+;; Package-Requires: ((emacs "26.3") (use-package) (general) (avy) (which-key) (org-bullets) (org-make-toc) (org-sidebar) (org-sticky-header))
 
 ;;; License:
 

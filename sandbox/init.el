@@ -17,7 +17,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (org-sticky-header org-ql peg ov org-super-agenda ts ht f dash-functional org-make-toc s dash org-bullets use-package bind-key quelpa org-sidebar org-plus-contrib general alpha-org))))
+    (doom-themes which-key avy org-sticky-header org-ql peg ov org-super-agenda ts ht f dash-functional org-make-toc s dash org-bullets use-package bind-key quelpa org-sidebar org-plus-contrib general alpha-org))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

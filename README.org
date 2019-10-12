@@ -31,8 +31,8 @@ A step-by-step guide showing the use of some features would probably be helpful.
 2. Open this =README.org= file.
 3. Press =M-SPC vt= to show the tree sidebar, and again to hide it.
 4. Press =M-SPC vs= to show the item sidebar, and again to hide it.
-5. Select the tree sidebar window and press =<S-tab>= to globally cycle the tree's outline visibility.
-6. Click on a heading *(which one?)* in the tree sidebar to show that entry's contents.
+5. Select the tree sidebar window and press =<S-tab>= to globally cycle the tree's outline visibility.  Press =<tab>= or click =mouse-2= to cycle individual trees.
+6. Click on a heading *(which one?)* with =mouse-1= in the tree sidebar to show that entry's contents.
 7. Press =M-SPC vt= to show the tree sidebar for just that entry.
 8. In the tree sidebar, click and drag the on a heading to show more of its contents.  Try clicking and dragging with both =mouse-1= and =mouse-2=.
 
@@ -69,7 +69,7 @@ This header is tangled to =alpha-org.el=, declaring package dependencies so that
 ;; Author: Adam Porter <adam@alphapapa.net>
 ;; Keywords: outlines
 
-;; Package-Requires: ((emacs "26.3") (use-package) (general) (org-bullets) (org-make-toc) (org-sidebar) (org-sticky-header))
+;; Package-Requires: ((emacs "26.3") (use-package) (general) (avy) (which-key) (org-bullets) (org-make-toc) (org-sidebar) (org-sticky-header))
 
 ;;; License:
 
@@ -153,6 +153,10 @@ Can I use a variable for this prefix key?
                          (integer it))))
         (copy-marker pos))))
 #+END_SRC
+*** TODO which-key
+*** MAYBE Hydra
+*** MAYBE [[https://gitlab.com/jjzmajic/hercules.el][hercules]]
+
 
 ** Org 
 
@@ -267,10 +271,18 @@ Not sure if I should use it or move its Org-related code into this.
 
 *** Other Code
 
+**** TODO Tree-to-indirect-buffer command
+
+My own function that works a bit better than the built-in one.
+
+***** TODO Demo it
+
+**** TODO Agenda for subtree command
+
+***** TODO Demo it
 **** TODO Outline tidying
 
 My function that fixes blank lines between entries.
-
 **** TODO =org-return-dwim=
 
 Should demo this too.
