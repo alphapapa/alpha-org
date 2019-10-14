@@ -39,38 +39,16 @@
   (general-create-definer alpha-org/general-def
     :prefix "M-SPC"))
 
-(defun ap/org-avy-refile-as-child ()
-  "Refile current heading as first child of heading selected with `avy.'"
-  ;; Inspired by `org-teleport': http://kitchingroup.cheme.cmu.edu/blog/2016/03/18/Org-teleport-headlines/
-  (interactive)
-  ;; NOTE: Use `when-let' so that if avy is aborted with "C-g", `org-refile' won't be called with
-  ;; a nil refile location.
-  (when-let ((marker (ap/org-avy-marker)))
-    (let* ((filename (buffer-file-name (or (buffer-base-buffer (marker-buffer marker))
-                                           (marker-buffer marker))))
-           (heading (org-with-point-at marker
-                      (org-get-heading 'no-tags 'no-todo)))
-           ;; NOTE: I guess this won't work with target buffers whose filename is nil, but I doubt
-           ;; I'll ever want to do that.
-           (rfloc (list heading filename nil marker))
-           (org-after-refile-insert-hook (cons #'org-reveal org-after-refile-insert-hook)))
-      (org-refile nil nil rfloc))))
-
-(defun ap/org-avy-marker ()
-  "Return marker at Org heading selected with avy."
-  (save-excursion
-    (when-let* ((org-reverse-note-order t)
-                (pos (atypecase (avy-with avy-goto-line
-                                  (avy--generic-jump (rx bol "*") nil avy-style))
-                       ;; If avy is aborted with "C-g", it returns `t', so we know it was NOT
-                       ;; aborted when it returns an int.  If it doesn't return an int, we return
-                       ;; nil.
-                       (integer it))))
-      (copy-marker pos))))
-
 ;;;; Configuration
 
 ;;  This section includes configuration code for options and packages built-in to Org.
+
+(use-package org
+  :custom (org-ellipsis "⋯"))
+
+(use-package org
+  :custom
+  (org-list-demote-modify-bullet '(("+" . "-") ("-" . "+"))))
 
 (use-package org
   :custom
@@ -95,8 +73,79 @@
 (use-package org-sticky-header
   :hook (org-mode . org-sticky-header-mode))
 
+(use-package org-web-tools
+  :general
+  (alpha-org/general-def
+    "ilu" #'org-web-tools-link-for-url))
+
+(use-package org-recent-headings
+  :general
+  (alpha-org/general-def
+    "hr" #'org-recent-headings-helm)
+  :config
+  (org-recent-headings-mode)
+  :custom
+  (org-recent-headings-reverse-paths t)
+  (org-recent-headings-candidate-number-limit 100))
+
+(use-package helm-org
+  :general
+  (alpha-org/general-def
+    "ha" #'helm-org-agenda-files-headings
+    "hb" #'helm-org-in-buffer-headings
+    "hp" #'helm-org-parent-headings)
+  :custom
+  (helm-org-format-outline-path t))
+
 (use-package org-make-toc
   :hook (org-mode . org-make-toc-mode))
+
+(use-package avy
+  :general
+  (alpha-org/general-def
+    "hv" #'alpha-org/goto-visible-heading
+    "rv" #'alpha-org/refile-to-visible)
+
+  :config
+  (defun alpha-org/refile-to-visible ()
+    "Refile current heading as first child of visible heading selected with Avy."
+    ;; Inspired by `org-teleport':
+    ;; http://kitchingroup.cheme.cmu.edu/blog/2016/03/18/Org-teleport-headlines/
+    (interactive)
+    ;; NOTE: Use `when-let' so that if avy is aborted with "C-g",
+    ;; `org-refile' won't be called with a nil refile location.
+    (when-let ((marker (alpha-org/avy-marker)))
+      (let* ((filename (buffer-file-name (or (buffer-base-buffer
+                                              (marker-buffer marker))
+                                             (marker-buffer marker))))
+             (heading (org-with-point-at marker
+                        (org-get-heading 'no-tags 'no-todo)))
+             ;; NOTE: I guess this won't work with target buffers
+             ;; whose filename is nil, but I doubt I'll ever want to
+             ;; do that.
+             (rfloc (list heading filename nil marker))
+             (org-after-refile-insert-hook (cons #'org-reveal org-after-refile-insert-hook)))
+        (org-refile nil nil rfloc))))
+
+  (defun alpha-org/goto-visible-heading ()
+    "Go to visible heading selected with Avy."
+    (interactive)
+    (when-let* ((marker (alpha-org/avy-marker)))
+      (with-current-buffer (marker-buffer marker)
+        (goto-char marker))))
+
+  (defun alpha-org/avy-marker ()
+    "Return marker at Org heading selected with Avy."
+    (save-excursion
+      (when-let* ((org-reverse-note-order t)
+                  (pos (avy-with avy-goto-line
+                         (avy-jump (rx bol (1+ "*") (1+ blank))))))
+        (when (integerp (car pos))
+          ;; If avy is aborted with "C-g", it returns
+          ;; `t', so we know it was NOT aborted when it
+          ;; returns an int.  If it doesn't return an
+          ;; int, we return nil.
+          (copy-marker (car pos)))))))
 
 (defun ap/org-refile-within-buffer ()
   "Call `org-refile' with `org-refile-targets' set to current buffer's headings."
