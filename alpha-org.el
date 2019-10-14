@@ -33,6 +33,9 @@
 
 (require 'use-package)
 
+(require 'cl-lib)
+(require 'subr-x)
+
 (use-package general
   :config
   (global-unset-key (kbd "M-SPC"))

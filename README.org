@@ -15,8 +15,6 @@ The easiest way to install the whole thing is with [[https://framagit.org/stecke
     :quelpa (alpha-org :fetcher github :repo "alphapapa/alpha-org"))
 #+end_src
 
-** TODO Include sandbox script for testing and demonstration
-
 ** Key Bindings
 
 To best demonstrate the power of this configuration, it's necessary to bind some keys by default (because using =M-x= to access everything is relatively cumbersome).  While this config isn't designed to work with [[https://github.com/emacs-evil/evil][EVIL]], similar to Spacemacs and Doom, all keys bound by this config are under a [[*%5B%5Bhttps://github.com/noctuid/general.el%5D%5BGeneral%5D%5D][prefix key]], which is =M-SPC= by default.
@@ -53,17 +51,6 @@ A step-by-step guide showing the use of some features would probably be helpful.
 6. Click on a heading *(which one?)* with =mouse-1= in the tree sidebar to show that entry's contents.
 7. Press =M-SPC vt= to show the tree sidebar for just that entry.
 8. In the tree sidebar, click and drag the on a heading to show more of its contents.  Try clicking and dragging with both =mouse-1= and =mouse-2=.
-
-
-** TODO Demo =org-return-dwim=
-
-** TODO Demo =org-sticky-header=
-
-Show how scrolling down past the heading still shows it in the header line.
-
-** MAYBE Scripted GIF screencast
-
-Like [[https://github.com/alphapapa/org-ql/blob/master/images/demo-helm-org-ql.sh][this script]].
 
 
 * Requirements
@@ -116,6 +103,9 @@ This header is tangled to =alpha-org.el=, declaring package dependencies so that
 ;;;; Requirements
 
 (require 'use-package)
+
+(require 'cl-lib)
+(require 'subr-x)
 #+END_SRC
 
 
@@ -418,6 +408,19 @@ Seems like a natural way to update it, even if not optimal.
 ** TODO =mouse-2= on headings in non-tree buffers to cycle visibility
 
 ** MAYBE Jump to characters/words with Avy
+
+
+** TODO Include sandbox script for testing and demonstration
+
+** TODO Demo =org-return-dwim=
+
+** TODO Demo =org-sticky-header=
+
+Show how scrolling down past the heading still shows it in the header line.
+
+** MAYBE Scripted GIF screencast
+
+Like [[https://github.com/alphapapa/org-ql/blob/master/images/demo-helm-org-ql.sh][this script]].
 
 
 * File Configuration
