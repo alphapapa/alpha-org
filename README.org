@@ -11,6 +11,7 @@ This can be used as a package which you [[*Installation][install]], or, since ea
 The easiest way to install the whole thing is with [[https://framagit.org/steckerhalter/quelpa-use-package][quelpa-use-package]] (which may be installed from [[https://melpa.org][MELPA]]), like so:
 
 #+begin_src elisp :tangle no
+  (require 'quelpa-use-package)
   (use-package alpha-org
     :quelpa (alpha-org :fetcher github :repo "alphapapa/alpha-org"))
 #+end_src
