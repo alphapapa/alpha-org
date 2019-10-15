@@ -22,6 +22,16 @@ The easiest way to install the whole thing is with [[https://framagit.org/stecke
     :quelpa (alpha-org :fetcher github :repo "alphapapa/alpha-org"))
 #+end_src
 
+** Sandbox
+
+The included script =emacs-sandbox.sh= can be used to try this configuration in a sandbox, separately from your existing Emacs configuration, like this:
+
+#+BEGIN_SRC sh
+  bash emacs-sandbox.sh README.org
+#+END_SRC
+
+After Emacs opens this file, follow the instructions in the =Installation= section above, or load the =alpha-org.el= library, e.g. with =M-x load-file RET alpha-org.el RET=.
+
 ** Key Bindings
 
 To best demonstrate the power of this configuration, it's necessary to bind some keys by default (because using =M-x= to access everything is relatively cumbersome).  While this config isn't designed to work with [[https://github.com/emacs-evil/evil][EVIL]], similar to Spacemacs and Doom, all keys bound by this config are under a [[*%5B%5Bhttps://github.com/noctuid/general.el%5D%5BGeneral%5D%5D][prefix key]], which is =M-SPC= by default.
