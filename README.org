@@ -2,6 +2,12 @@
 
 =alpha-org= is a powerful configuration for =org-mode=, similar to how [[http://spacemacs.org/][Spacemacs]] and [[https://github.com/hlissner/doom-emacs][Doom]] are configurations for Emacs as a whole.
 
+* Screenshots
+
+Theming is not included as part of this configuration; this is just an example showing =doom-nord=.
+
+[[images/1.png]]
+
 * Usage
 
 This can be used as a package which you [[*Installation][install]], or, since each feature is configured in its own =use-package= block, you may copy parts into your own config.
@@ -263,7 +269,9 @@ This package displays in the header-line the Org heading for the node that’s a
     (org-recent-headings-reverse-paths t)
     (org-recent-headings-candidate-number-limit 100))
 #+END_SRC
+
 ***** TODO org-bookmark-heading
+
 ***** DONE helm-org
 
 #+BEGIN_SRC elisp
