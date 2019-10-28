@@ -228,7 +228,6 @@ Speed commands provide one-key bindings to quickly navigate and manipulate outli
     :custom (org-sidebar-tree-side 'left))
 #+end_src
 
-****** TODO Screenshots
 
 ***** TODO yequake
 
@@ -414,10 +413,20 @@ Should demo this too.
 
 * Ideas
 
+** MAYBE Organize code by features rather than packages
+
+Users are more interested in features than what packages implement them.  Even if a package were mentioned in more than one =use-package= form, it would still be helpful, because users could copy /features/ rather than whole /packages/ into their own configs.
+
+** TODO Update tree sidebar with idle timer
+
+e.g. to hide text from added entries (unless I can figure another way around that).
+
+** MAYBE Use font-locking to hide entry content in tree sidebar
+
+Suggested in a comment on Reddit.  I think I noted it in =org-sidebar='s notes file.
 ** TODO Dim background of sidebar windows
 
 Maybe something like [[https://github.com/mina86/auto-dim-other-buffers.el][auto-dim-other-buffers]].
-
 ** TODO Hook to update sidebar item buffers when file is saved
 
 Seems like a natural way to update it, even if not optimal.
