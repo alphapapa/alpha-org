@@ -450,6 +450,11 @@ Show how scrolling down past the heading still shows it in the header line.
 
 Like [[https://github.com/alphapapa/org-ql/blob/master/images/demo-helm-org-ql.sh][this script]].
 
+* Notes
+
+** Discussions
+
+*** [[https://www.reddit.com/r/orgmode/comments/dhzm0n/rfc_wip_alphaorg_a_configuration_like_spacemacs/][{RFC, WIP} alpha-org (a configuration like Spacemacs or Doom, but just for Org) : orgmode]]
 
 * File Configuration
 
