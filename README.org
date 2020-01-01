@@ -24,11 +24,11 @@ The easiest way to install the whole thing is with [[https://framagit.org/stecke
 
 ** Sandbox
 
-The included script =emacs-sandbox.sh= can be used to try this configuration in a sandbox, separately from your existing Emacs configuration, like this:
+The script [[https://github.com/alphapapa/emacs-sandbox.sh][emacs-sandbox.sh]] can be used to try this configuration in a sandbox, separately from your existing Emacs configuration, like this:
 
-#+BEGIN_SRC sh
-  bash emacs-sandbox.sh README.org
-#+END_SRC
+#+BEGIN_EXAMPLE
+  $ emacs-sandbox.sh README.org
+#+END_EXAMPLE
 
 After Emacs opens this file, follow the instructions in the =Installation= section above, or load the =alpha-org.el= library, e.g. with =M-x load-file RET alpha-org.el RET=.
 
